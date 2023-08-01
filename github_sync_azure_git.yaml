@@ -2,7 +2,7 @@ name: Sync From Git To Azure
 
 on: 
   push:
-    branches: []
+    branches: [build-pipeline]
     
 jobs:
   sync_from_git_to_azure:
