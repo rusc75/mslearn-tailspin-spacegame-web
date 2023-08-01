@@ -1,0 +1,40 @@
+name: Sync From Git To Azure
+
+on: 
+  push:
+    branches: []
+    
+jobs:
+  sync_from_git_to_azure:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup environment variables
+      run: |
+        echo ::set-env name=AZUREPAT::${{ secrets.AZUREPAT }}
+        echo ::set-env name=AZUSERNAME::${{ secrets.AZUSERNAME }}
+        echo ::set-env name=AZUSER_EMAIL::${{ secrets.AZUSER_EMAIL }}
+        echo ::set-env name=AZORG::${{ secrets.AZORG }}
+    - name: Git clone repo
+      run: |
+        git clone https://github.com/rusc75/mslearn-tailspin-spacegame-web.git
+        cd reponame
+        rm -rf .git
+    - name: Clone to Azure DevOps Repo
+      run: |
+        cd ..
+        GIT_CMD_REPOSITORY="https://ratscher75@dev.azure.com/ratscher75/spacegame/_git/spacegame" 
+        git clone $GIT_CMD_REPOSITORY
+    - name: Copy files from git repro to azure repro
+      run: |
+        cp -r testAzureDevops/* TestGitSync/
+    - name: Configure user in azure repro
+      run: |
+        cd TestGitSync
+        git config --global user.email "$AZUSER_EMAIL"
+        git config --global user.name "$AZUSERNAME"
+    - name: Commit and Push to azure
+      run: |
+        git add .
+        git commit -m "sync from git to azure"
+        git push
