@@ -18,7 +18,7 @@ jobs:
     - name: Git clone repo
       run: |
         git clone https://github.com/rusc75/mslearn-tailspin-spacegame-web.git
-        cd reponame
+        cd mslearn-tailspin-spacegame-web
         rm -rf .git
     - name: Clone to Azure DevOps Repo
       run: |
